@@ -1,12 +1,12 @@
-%global commit 8db8ca1fecfcce8def1f9265fa1742baa0e0c271
+%global commit 59e9c47b0eb48a9e4bcf9631fa062ee939bd2e83
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global build_timestamp %(date +"20260502")
-%global rel_build 11.git.%{build_timestamp}.%{shortcommit}%{?dist}
+%global build_timestamp %(date +"20260504")
+%global rel_build 1.git.%{build_timestamp}.%{shortcommit}%{?dist}
 
 %bcond_with         asan
 
 Name:               quickshell
-Version:            0.2.1
+Version:            0.3.0
 Release:            %{rel_build}
 Summary:            Flexible QtQuick based desktop shell toolkit
 
