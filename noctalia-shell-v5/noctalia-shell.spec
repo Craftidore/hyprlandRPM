@@ -1,4 +1,4 @@
-%global commit          230379def1019e1e18298867484df5a9baa5e1d2
+%global commit          e7a557e13e38a7661aed7dc6894ed6378a539eae
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 %global upstreamname    noctalia-shell
 

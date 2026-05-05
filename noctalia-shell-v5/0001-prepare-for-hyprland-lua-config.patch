@@ -1,24 +1,61 @@
-From 971c28a6d7e1e56a61cc020f8c3ec99a2318f8b5 Mon Sep 17 00:00:00 2001
+From 46ff53b038963d2a2617f61065eaa597996383d5 Mon Sep 17 00:00:00 2001
 From: LionHeartP <LionHeartP@proton.me>
 Date: Fri, 1 May 2026 10:38:59 +0300
 Subject: [PATCH] prepare for hyprland lua config
 
 ---
+ assets/templates/hyprland/hyprland.lua        | 29 +++++++++++++++++++
  meson.build                                   |  1 +
  .../hyprland/hyprland_config_backend.cpp      | 29 +++++++++++++++++++
  .../hyprland/hyprland_config_backend.h        |  5 ++++
  .../hyprland/hyprland_output_backend.cpp      | 11 ++++++-
  .../hyprland/hyprland_workspace_backend.cpp   |  8 ++++-
- src/shell/session/session_panel.cpp           |  7 +++--
- 6 files changed, 57 insertions(+), 4 deletions(-)
+ src/shell/session/session_panel.cpp           |  6 +++-
+ 7 files changed, 86 insertions(+), 3 deletions(-)
+ create mode 100644 assets/templates/hyprland/hyprland.lua
  create mode 100644 src/compositors/hyprland/hyprland_config_backend.cpp
  create mode 100644 src/compositors/hyprland/hyprland_config_backend.h
 
+diff --git a/assets/templates/hyprland/hyprland.lua b/assets/templates/hyprland/hyprland.lua
+new file mode 100644
+index 000000000..dd8b183c2
+--- /dev/null
++++ b/assets/templates/hyprland/hyprland.lua
+@@ -0,0 +1,29 @@
++local primary = "rgb({{colors.primary.default.hex_stripped}})"
++local surface = "rgb({{colors.surface.default.hex_stripped}})"
++local secondary = "rgb({{colors.secondary.default.hex_stripped}})"
++local error = "rgb({{colors.error.default.hex_stripped}})"
++
++hl.config({
++    general = {
++        col = {
++            active_border = primary,
++            inactive_border = surface,
++        },
++    },
++    group = {
++        col = {
++            border_active = secondary,
++            border_inactive = surface,
++            border_locked_active = error,
++            border_locked_inactive = surface,
++        },
++        groupbar = {
++            col = {
++                active = secondary,
++                inactive = surface,
++                locked_active = error,
++                locked_inactive = surface,
++            },
++        },
++    },
++})
 diff --git a/meson.build b/meson.build
-index 36350c075..8ea620017 100644
+index cad80d73d..73bf9df41 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -548,6 +548,7 @@ _noctalia_sources = files(
+@@ -567,6 +567,7 @@ _noctalia_sources = files(
    'src/compositors/ext_workspace/ext_workspace_output_backend.cpp',
    'src/compositors/ext_workspace/ext_workspace_backend.cpp',
    'src/compositors/keyboard_backend.cpp',
@@ -97,7 +134,7 @@ index 712a5da64..0326300af 100644
  
  } // namespace compositors::hyprland
 diff --git a/src/compositors/hyprland/hyprland_workspace_backend.cpp b/src/compositors/hyprland/hyprland_workspace_backend.cpp
-index 7fd577d5c..607b71820 100644
+index 02407fd7e..bba05d27b 100644
 --- a/src/compositors/hyprland/hyprland_workspace_backend.cpp
 +++ b/src/compositors/hyprland/hyprland_workspace_backend.cpp
 @@ -1,3 +1,4 @@
@@ -105,7 +142,7 @@ index 7fd577d5c..607b71820 100644
  #include "compositors/hyprland/hyprland_workspace_backend.h"
  
  #include "core/log.h"
-@@ -117,7 +118,12 @@ void HyprlandWorkspaceBackend::activate(const std::string& id) {
+@@ -118,7 +119,12 @@ void HyprlandWorkspaceBackend::activate(const std::string& id) {
    }
  
    std::string response;
@@ -120,7 +157,7 @@ index 7fd577d5c..607b71820 100644
  
  void HyprlandWorkspaceBackend::activateForOutput(wl_output* /*output*/, const std::string& id) { activate(id); }
 diff --git a/src/shell/session/session_panel.cpp b/src/shell/session/session_panel.cpp
-index 25def50d7..56ee373dd 100644
+index fc934783b..420ed561b 100644
 --- a/src/shell/session/session_panel.cpp
 +++ b/src/shell/session/session_panel.cpp
 @@ -1,6 +1,7 @@
@@ -131,19 +168,18 @@ index 25def50d7..56ee373dd 100644
  #include "config/config_service.h"
  #include "core/log.h"
  #include "core/process.h"
-@@ -43,8 +44,10 @@ namespace {
-     // Prefer compositor-native exits where available.
-     switch (compositors::detect()) {
+@@ -56,7 +57,10 @@ namespace {
+ 
+     switch (compositor) {
      case compositors::CompositorKind::Hyprland:
--      if (process::runSync({"hyprctl", "dispatch", "exit"})) {
--        return true;
-+      if (compositors::hyprland::isLua()) {
-+        if (process::runSync({"hyprctl", "dispatch", "hl.dsp.exit()"})) return true;
-+      } else {
-+        if (process::runSync({"hyprctl", "dispatch", "exit"})) return true;
-       }
-       break;
+-      return process::launchFirstAvailable({{"hyprctl", "dispatch", "exit"}});
++      if (compositors::hyprland::isLua())
++        return process::launchFirstAvailable({{"hyprctl", "dispatch", "hl.dsp.exit()"}});
++      else
++        return process::launchFirstAvailable({{"hyprctl", "dispatch", "exit"}});
      case compositors::CompositorKind::Sway:
+       return process::launchFirstAvailable({{"swaymsg", "exit"}, {"i3-msg", "exit"}});
+     case compositors::CompositorKind::Niri:
 -- 
 2.53.0
 
