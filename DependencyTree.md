@@ -1,0 +1,90 @@
+## Mandatory Packages
+
+- hyprland-git
+    - glaze-static
+        - N/A
+    - pkgconfig(aquamarine)
+        - Fulfilled: pkgconfig(hyprutils), pkgconfig(hyprwayland-scanner)
+    - pkgconfig(hyprcursor)
+        - Fulfilled: pkgconfig(hyprlang)
+    - pkgconfig(hyprgraphics)
+        - Fulfilled: pkgconfig(hyprutils)
+    - pkgconfig(hyprlang)
+        - Fulfilled: pkgconfig(hyprutils)
+    - pkgconfig(hyprutils)
+        - N/A
+    - pkgconfig(hyprwayland-scanner)
+        - N/A
+    - pkgconfig(hyprwire)
+        - Fulfilled: pkgconfig(hyprutils)
+- xdg-desktop-portal-hyprland
+    - Fulfilled: pkgconfig(hyprlang), pkgconfig(hyprutils), pkgconfig(hyprwayland-scanner)
+    - pkgconfig(hyprland-protocols)
+        - N/A
+- hyprpaper
+    - Fulfilled: pkgconfig(hyprgraphics), pkgconfig(hyprlang), pkgconfig(hyprutils), pkgconfig(hyprwayland-scanner), pkgconfig(hyprwire)
+    - pkgconfig(hyprtoolkit)
+        - Fulfilled: pkgconfig(hyprgraphics), pkgconfig(hyprlang), pkgconfig(hyprutils)
+- hyprlock
+    - Fulfilled: pkgconfig(hyprgraphics), pkgconfig(hyprlang), pkgconfig(hyprutils), 
+    - cmake(hyprwayland-scanner)
+        - Dunno if this requires anything different, just 'cause it's cmake(xxx) instead of pkgconfig(xxx)
+- hypridle
+    - Fulfilled: cmake(hyprwayland-scanner), pkgconfig(hyprland-protocols), pkgconfig(hyprlang), pkgconfig(hyprutils)
+- hyprland-guiutils (replaces hyprland-qtutils)
+    - Fulfilled: pkgconfig(hyprlang), pkgconfig(hyprtoolkit)
+
+## Optional Packages
+
+- hyprpicker
+    - Fulfilled: pkgconfig(hyprutils), pkgconfig(hyprwayland-scanner)
+- hyprlauncher
+    - Fulfilled: pkgconfig(hyprlang), pkgconfig(hyprtoolkit), pkgconfig(hyprutils), pkgconfig(hyprwire)
+- hyprsysteminfo
+    - Fulfilled: pkgconfig(hyprutils), pkgconfig(hyprtoolkit)
+    - Runtime-Requires: hyprland-qt-support
+- hyprsunset
+    - Fulfilled: pkgconfig(hyprland-protocols), pkgconfig(hyprlang), pkgconfig(hyprutils), pkgconfig(hyprwayland-scanner)
+- hyprpolkitagent
+    - Fulfilled: pkgconfig(hyprutils)
+    - Runtime-Requires: hyprland-qt-support
+- hyprland-qt-support 
+    - Fulfilled: pkgconfig(hyprlang)
+- hyprqt6engine
+    - Fulfilled: pkgconfig(hyprlang), pkgconfig(hyprutils)
+- hyprpwcenter
+    - Fulfilled: pkgconfig(hyprtoolkit), pkgconfig(hyprutils)
+- hyprshutdown
+    - Fulfilled: glaze-devel, pkgconfig(hyprlang), pkgconfig(hyprutils), pkgconfig(hyprtoolkit)
+
+## Build Order
+
+- Phase 1: No deps
+    - glaze
+    - hyprutils
+    - hyprwayland-scanner
+    - hyprland-protocols
+- Phase 2:
+    - aquamarine
+    - hyprgraphics
+    - hyprlang
+    - hyprwire
+    - hyprpicker (optional)
+    - hyprpolkitagent (optional)
+- Phase 3:
+    - hyprtoolkit
+    - hyprcursor
+    - xdg-desktop-portal-hyprland
+    - hyprlock
+    - hypridle
+    - hyprsunset (optional)
+    - hyprland-qt-support (optional)
+    - hyprqt6engine (optional)
+- Phase 4:
+    - hyprland-git
+    - hyprpaper
+    - hyprland-guiutils
+    - hyprlauncher (optional)
+    - hyprsysteminfo (optional)
+    - hyprpwcenter (optional)
+    - hyprshutdown (optional)
