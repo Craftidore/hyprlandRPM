@@ -16,3 +16,5 @@ A collection of Hyprland and related packages:
 * **[hyprpwcenter](https://github.com/hyprwm/hyprpwcenter)** [(spec)](https://github.com/wayblueorg/hyprlandRPM/blob/master/hyprpwcenter/hyprpwcenter.spec) - GUI Control Center for Pipewire.
 * **[hyprshutdown](https://github.com/hyprwm/hyprshutdown)** [(spec)](https://github.com/wayblueorg/hyprlandRPM/blob/master/hyprshutdown/hyprshutdown.spec) - Graceful Shutdown Utility for Hyprland.
 
+Special thanks to solopasha, who originally created these specs, and LionHeartP who updated solopasha's scripts for fedora 44.
+
